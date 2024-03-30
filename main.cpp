@@ -35,6 +35,7 @@ int main () {
         DrawCircle(ball_x,ball_y,ball_radius, WHITE);
         DrawRectangle(10, screenHeight/2 - 120/2, 25, 120, WHITE);
         DrawRectangle(screenWidth - 35, screenHeight /2 - 60, 25, 120, WHITE);
+        DrawLine(screenWidth/2, 0, screenWidth/2, screenHeight, WHITE);
         EndDrawing();
     }
 
