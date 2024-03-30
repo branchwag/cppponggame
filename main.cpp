@@ -5,8 +5,8 @@ using namespace std;
 
 int main () {
 
-    const int screenWidth = 800;
-    const int screenHeight = 600;
+    const int screenWidth = 1280;
+    const int screenHeight = 800;
     int ball_x = 100;
     int ball_y = 100;
     int ball_speed_x = 5;
@@ -33,6 +33,7 @@ int main () {
         }
 
         DrawCircle(ball_x,ball_y,ball_radius, WHITE);
+        DrawRectangle(0, 0, 25, 120, WHITE);
         EndDrawing();
     }
 
