@@ -32,6 +32,20 @@ class Ball{
 };
 
 class Paddle{
+
+    protected: 
+
+    void LimitMovement(){
+        
+            if(y <= 0) {
+            y = 0;
+        }
+            if(y + height >= GetScreenHeight()){
+            y = GetScreenHeight() - height;
+        }
+        
+    }
+
     public: 
         float x,y;
         float width, height;
@@ -49,17 +63,29 @@ class Paddle{
             y = y + speed;
         }
 
-        if(y <= 0) {
-            y = 0;
-        }
-        if(y + height >= GetScreenHeight()){
-            y = GetScreenHeight() - height;
-        }
+        LimitMovement();
+
     }
+};
+
+class ComputerPaddle: public Paddle{
+
+    public:
+
+        void Update(int ball_y) {
+            if (y + height/2 > ball_y){
+                y = y - speed;
+            }
+            if(y + height/2 <= ball_y){
+                y = y + speed;
+            }
+            LimitMovement();
+        }
 };
 
 Ball ball;
 Paddle player;
+ComputerPaddle computerpaddle;
 
 int main () {
 
@@ -81,16 +107,33 @@ int main () {
     player.y = screenHeight / 2 - player.height/2;
     player.speed = 6;
 
+    computerpaddle.height = 120;
+    computerpaddle.width = 25;
+    computerpaddle.x = 10;
+    computerpaddle.y = screenHeight/2 - computerpaddle.height/2;
+    computerpaddle.speed = 6; 
+
     while (WindowShouldClose() == false){
         BeginDrawing();
         ClearBackground(BLACK);
 
         ball.Update();
         player.Update();
+        computerpaddle.Update(ball.y);
+
+        //checking for collisions
+        if (CheckCollisionCircleRec({ball.x, ball.y}, ball.radius, {player.x, player.y, player.width, player.height})) {
+            ball.speed_x *= -1;
+        }
+
+        if (CheckCollisionCircleRec({ball.x, ball.y}, ball.radius, {computerpaddle.x, computerpaddle.y, computerpaddle.width, computerpaddle.height})) {
+            ball.speed_x *= -1;
+        }
 
         DrawLine(screenWidth/2, 0, screenWidth/2, screenHeight, WHITE);
         ball.Draw();
-        DrawRectangle(10, screenHeight/2 - 120/2, 25, 120, WHITE);
+        computerpaddle.Draw();
+        // DrawRectangle(10, screenHeight/2 - 120/2, 25, 120, WHITE);
         player.Draw();
         EndDrawing();
     }
